@@ -1,0 +1,78 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+<%- include('../includes/nav.ejs') %>
+
+<section>
+    <h1>
+        <% if (editing) { %> 
+            Edit Product 
+        <% } else { %> 
+            Add Product 
+        <% } %>
+    </h1>
+    <div class="form-wrapper">
+      <form class="" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
+        <div class="form-group mb-2">
+          <label for="productTitle">Product Name</label>
+          <input
+            type="text"
+            name="title"
+            class="form-control"
+            id="productTitle"
+            placeholder="E.g. Cheesecake"
+            value="<% if (editing) { %><%= product.title %><% } %>"
+            required
+          />
+        </div>
+        <div class="form-group mb-2">
+          <label for="productImg">Image URL</label>
+          <input
+            type="text"
+            name="img_url"
+            class="form-control"
+            id="productImg"
+            placeholder="E.g. https://img.ur/345/"
+            value="<% if (editing) { %><%= product.image %><% } %>"
+            required
+          />
+        </div>
+        <div class="form-group mb-2">
+          <label for="productDescription">Description</label>
+          <textarea
+            name="description"
+            class="form-control"
+            id="productDescription"
+            placeholder="Enter details about the product."
+            rows="5"
+            required
+          ><% if (editing) { %><%= product.description %><% } %></textarea>
+        </div>
+        <div class="form-group mb-2"> 
+          <label for="productPrice">Price</label>
+          <input
+            type="number"
+            step="0.01"
+            name="price"
+            class="form-control"
+            id="productPrice"
+            placeholder="Enter price of the product"
+            value="<% if (editing) { %><%=product.price %><% } %>"
+            required
+          />
+        </div>
+        <button type="submit" class="btn btn-primary btn-inline mb-2">
+            <% if (editing) { %> 
+                Edit Product 
+            <% } else { %> 
+                Add Product 
+            <% } %> 
+        </button>
+        <% if (editing) { %> 
+            <input type="hidden" value="<%= product.id %>" name="productId" />
+        <% } %> 
+      </form>
+    </div>
+  </section>
+
+<%- include('../includes/end.ejs') %>
