@@ -11,19 +11,22 @@
                 <li>
                     <div class="detail-wrapper">
                         <div class="detail-image">
-                            <img src="<%= p.productData.image %>" alt="<%= p.productData.title %>" />
+                            <img src="<%= p.image %>" alt="<%= p.title %>" />
                         </div>
                         <div class="detail-details">
-                            <h3 class="detail-title"><%= p.productData.title %> (Qty - <%= p.qty %>)</h3>
-                            <p class="detail-price">&#8377; <%= p.productData.price %></p>
+                            <h3 class="detail-title"><%= p.title %> (Qty - <%= p.quantity %>)</h3>
+                            <p class="detail-price">&#8377; <%= p.price %></p>
                             <form action="/cart-delete-item" method="POST">
                                 <button type="submit" class="btn btn-danger">Delete</button>
-                                <input type="hidden" value="<%= p.productData.id %>" name="productId"/>
+                                <input type="hidden" value="<%= p._id %>" name="productId"/>
                             </form>
                         </div>
                     </div>
                 </li>
             <% }) %>
+            <form action="/create-order" method="POST">
+                <button class="btn btn-success" type="submit">Order Now</button>
+            </form>
         </ul>
     <% } else { %>
         <p>No products in your cart.</p>

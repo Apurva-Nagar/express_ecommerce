@@ -5,6 +5,24 @@
 
 <section>
     <h1>Your Orders</h1>
+    <% if (orders.length <= 0) { %>
+        <p>You have no orders.</p>
+    <% } else { %>
+        <ul>
+            <% orders.forEach(order => { %>
+                <li>
+                    <h1>Order - #<%= order._id %></h1>
+                    <ul>
+                        <% order.items.forEach(item => { %>
+                            <li>
+                                <%= item.title %> | <%= item.price %> | <%= item.quantity %>
+                            </li>
+                        <% }); %>
+                    </ul>
+                </li>
+            <% }); %>
+        </ul>
+    <% } %>
 </section>
 
 <%- include('../includes/end.ejs') %>
