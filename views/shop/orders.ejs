@@ -9,18 +9,26 @@
         <p>You have no orders.</p>
     <% } else { %>
         <ul>
+            <div class="cart-items-wrapper">
             <% orders.forEach(order => { %>
                 <li>
-                    <h1>Order - #<%= order._id %></h1>
+                    <div class="detail-wrapper">
+                    <h5 class="detail-title">Order - #<%= order._id %></h5>
                     <ul>
-                        <% order.items.forEach(item => { %>
+                        <% order.products.forEach(p => { %>
+                            <div class="order-items">
                             <li>
-                                <%= item.title %> | <%= item.price %> | <%= item.quantity %>
+                                Product: <%= p.product.title %> <br/> 
+                                Price: <%= p.product.price %> <br/> 
+                                Qty: <%= p.quantity %>
                             </li>
+                        </div>
                         <% }); %>
                     </ul>
+                </div>
                 </li>
             <% }); %>
+        </div>
         </ul>
     <% } %>
 </section>
