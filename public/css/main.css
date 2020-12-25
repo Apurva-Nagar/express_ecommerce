@@ -147,3 +147,21 @@ section {
   border-bottom: 1px solid #c0c0c0;
   padding: 10px 0px;
 }
+
+.logout-btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 0.5rem 1rem;
+  display: block;
+}
+
+.logout-btn:hover {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.form-helper {
+  text-align: left;
+  margin-left: 130px;
+  font-size: 13px;
+}

@@ -8,12 +8,14 @@
       <li class="<%= path === '/products' ? 'nav-item active' : 'nav-item' %>">
         <a class="nav-link" href="/products">Products</a>
       </li>
+      <% if (isAuthenticated) { %>
       <li class="<%= path === '/cart' ? 'nav-item active' : 'nav-item' %>">
         <a class="nav-link" href="/cart">Cart</a>
       </li>
       <li class="<%= path === '/orders' ? 'nav-item active' : 'nav-item' %>">
         <a class="nav-link" href="/orders">Orders</a>
       </li>
+      <% } %> <% if (isAuthenticated && userType == 'admin') { %>
       <li
         class="<%= path === '/admin/add-product' ? 'nav-item active' : 'nav-item' %>"
       >
@@ -24,6 +26,21 @@
       >
         <a class="nav-link" href="/admin/product-list/">Admin Products</a>
       </li>
+      <% } %> <% if (!isAuthenticated) { %>
+      <li class="<%= path === '/login' ? 'nav-item active' : 'nav-item' %>">
+        <a class="nav-link" href="/login">Login</a>
+      </li>
+      <li class="<%= path === '/signup' ? 'nav-item active' : 'nav-item' %>">
+        <a class="nav-link" href="/signup">Signup</a>
+      </li>
+      <% } else { %>
+      <li class="nav-item">
+        <form action="/logout" method="POST">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <button type="submit" class="logout-btn">Logout</button>
+        </form>
+      </li>
+      <% } %>
     </ul>
   </div>
 </nav>

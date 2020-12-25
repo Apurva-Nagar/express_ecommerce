@@ -7,7 +7,17 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  password: {
+    type: String,
+    required: true,
+  },
+  resetToken: String,
+  resetTokenExpire: Date,
   email: {
+    type: String,
+    required: true,
+  },
+  userType: {
     type: String,
     required: true,
   },

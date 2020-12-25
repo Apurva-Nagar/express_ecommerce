@@ -11,8 +11,14 @@
             Add Product 
         <% } %>
     </h1>
+    
     <div class="form-wrapper">
-      <form class="" action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
+      <% if (errorMessage != '') { %>
+        <div class="alert alert-danger" role="alert">
+          <%= errorMessage %>
+        </div>
+        <% } %>
+      <form action="/admin/<% if (editing) { %>edit-product<% } else { %>add-product<% } %>" method="POST">
         <div class="form-group mb-2">
           <label for="productTitle">Product Name</label>
           <input
@@ -21,7 +27,7 @@
             class="form-control"
             id="productTitle"
             placeholder="E.g. Cheesecake"
-            value="<% if (editing) { %><%= product.title %><% } %>"
+            value="<% if (editing || hasError) { %><%= product.title %><% } %>"
             required
           />
         </div>
@@ -33,7 +39,7 @@
             class="form-control"
             id="productImg"
             placeholder="E.g. https://img.ur/345/"
-            value="<% if (editing) { %><%= product.image %><% } %>"
+            value="<% if (editing || hasError) { %><%= product.image %><% } %>"
             required
           />
         </div>
@@ -43,12 +49,13 @@
             name="description"
             class="form-control"
             id="productDescription"
-            placeholder="Enter details about the product."
+            placeholder="Enter details about the product. (Min. 150 characters)"
             rows="5"
             required
-          ><% if (editing) { %><%= product.description %><% } %></textarea>
+          ><% if (editing || hasError) { %><%= product.description %><% } %></textarea>
         </div>
-        <div class="form-group mb-2"> 
+        <div class="form-group mb-2">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
           <label for="productPrice">Price</label>
           <input
             type="number"
@@ -57,7 +64,7 @@
             class="form-control"
             id="productPrice"
             placeholder="Enter price of the product"
-            value="<% if (editing) { %><%=product.price %><% } %>"
+            value="<% if (editing || hasError) { %><%=product.price %><% } %>"
             required
           />
         </div>

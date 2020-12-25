@@ -1,26 +1,55 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
+const flash = require("connect-flash");
+
+const MONGODB_URI =
+  "mongodb+srv://Apurva-Nagar:CEeRU7h0Tusam1yK@cluster0.pnamm.mongodb.net/shop";
 
 const app = express();
 
+const store = MongoDBStore({
+  uri: MONGODB_URI,
+  collection: "sessions",
+});
+
 const path = require("path");
+
 const adminRoutes = require("./routes/admin");
 const shopRoutes = require("./routes/shop");
+const authRoutes = require("./routes/auth");
 
 const errorsController = require("./controllers/errors");
-
-const mongoose = require("mongoose");
 
 const User = require("./models/user");
 
 app.set("view engine", "ejs");
 app.set("views", "views");
-
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
+const csrfProtection = csrf();
+
+app.use(
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
+);
+
+app.use(csrfProtection);
+app.use(flash());
+
 app.use((req, res, next) => {
-  User.findById("5fd79405221d7d4de85add0f")
+  if (!req.session.user) {
+    return next();
+  }
+  User.findById(req.session.user._id)
     .then((user) => {
       req.user = user;
       next();
@@ -30,27 +59,25 @@ app.use((req, res, next) => {
     });
 });
 
+app.use((req, res, next) => {
+  res.locals.isAuthenticated = req.session.isLoggedIn;
+  res.locals.csrfToken = req.csrfToken();
+  try {
+    res.locals.userType = req.user.userType;
+  } catch (err) {
+    res.locals.userType = null;
+  }
+  next();
+});
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 app.use(errorsController.get404);
 
 mongoose
-  .connect(
-    "mongodb+srv://Apurva-Nagar:CEeRU7h0Tusam1yK@cluster0.pnamm.mongodb.net/shop?retryWrites=true&w=majority"
-  )
+  .connect(MONGODB_URI)
   .then((result) => {
-    User.findOne().then((user) => {
-      if (!user) {
-        const user = new User({
-          username: "Apurva",
-          email: "apurvanagar@gmail.com",
-          cart: {
-            items: [],
-          },
-        });
-        user.save();
-      }
-    });
     app.listen(3000);
   })
   .catch((err) => {

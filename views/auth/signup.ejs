@@ -1,0 +1,72 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+    <%- include('../includes/nav.ejs') %>
+    <section>
+        <h1>
+            Signup
+        </h1>
+        <div class="form-wrapper">
+          <% if (errorMessage != '') { %>
+            <div class="alert alert-danger" role="alert">
+              <%= errorMessage %>
+            </div>
+            <% } %>
+          <form action="/signup" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <div class="form-group mb-2">
+              <label for="username">Name</label>
+              <input
+                type="text"
+                name="username"
+                class="form-control"
+                id="username"
+                placeholder="Sheldon Copper"
+                value="<%= oldInput.username %>"
+                required
+              />
+            </div>
+            <div class="form-group mb-2">
+              <label for="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                class="form-control"
+                id="email"
+                placeholder="email_id@domain.com"
+                value="<%= oldInput.email %>"
+                required
+              />
+            </div>
+            <div class="form-group mb-2">
+              <label for="password">Password</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                id="password"
+                placeholder="Password"
+                value="<%= oldInput.password %>"
+                required
+              />
+            </div>
+            <div class="form-group mb-2">
+                <label for="confirmPassword">Confirm Password</label>
+                <input
+                  type="password"
+                  name="confirmPassword"
+                  class="form-control"
+                  id="confirmPassword"
+                  placeholder="Confirm Password"
+                  value="<%= oldInput.confirmPassword%>"
+                  required
+                />
+              </div>
+            <button type="submit" class="btn btn-primary btn-inline mb-2">
+                Signup
+            </button>
+          </form>
+        </div>
+      </section>
+
+<%- include('../includes/end.ejs') %>

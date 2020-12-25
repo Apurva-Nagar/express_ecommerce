@@ -13,11 +13,18 @@
                     <img src="<%= product.image %>" class="card-img-top" alt="<%= product.title %>">
                     <div class="card-body">
                         <h5 class="card-title"><%= product.title %></h5>
-                        <p class="card-text"><%= product.description %></p>
+                        <p class="card-text">
+                            <% if (product.description.length > 250) { %>
+                                <%= product.description.substring(0, 150) %> ...
+                            <% } else { %>
+                                <%= product.description %>
+                            <% } %>
+                        </p>
                         <p class="card-price">&#8377; <%= product.price %></p>
                         <div class="button-wrapper">
                             <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn btn-warning">Edit</a>
                             <form action="/admin/delete-product" method="POST">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                 <button class="btn btn-danger" type="submit">Delete</button>
                                 <input type="hidden" name="productId" value="<%= product._id %>">
                             </form>
