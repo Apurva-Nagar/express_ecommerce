@@ -56,6 +56,7 @@ exports.getCart = (req, res, next) => {
         pageTitle: "Your Cart",
         path: "/cart",
         products: products,
+        total: user.cart.total,
       });
     })
     .catch((err) => {
@@ -78,6 +79,14 @@ exports.postCartDeleteItem = (req, res, next) => {
   const productId = req.body.productId;
   req.user
     .deleteItemFromCart(productId)
+    .then((result) => res.redirect("/cart"))
+    .catch((err) => console.log(err));
+};
+
+exports.postCartDecreaseItemQty = (req, res, next) => {
+  const productId = req.body.productId;
+  req.user
+    .decreaseItemQtyCart(productId)
     .then((result) => res.redirect("/cart"))
     .catch((err) => console.log(err));
 };
@@ -111,6 +120,8 @@ exports.postOrder = (req, res, next) => {
           user_id: req.user,
         },
         products: products,
+        total: user.cart.total,
+        date: Date.now(),
       });
       order.save();
     })

@@ -24,6 +24,8 @@ const orderSchema = new Schema({
       required: true,
     },
   },
+  total: { type: Number },
+  date: { type: Date },
 });
 
 module.exports = mongoose.model("Order", orderSchema);

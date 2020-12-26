@@ -1,3 +1,5 @@
+const Product = require("../models/product");
+
 const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
@@ -32,6 +34,7 @@ const userSchema = new Schema({
         quantity: { type: Number, required: true },
       },
     ],
+    total: { type: Number, default: 0.0 },
   },
 });
 
@@ -51,8 +54,10 @@ userSchema.methods.addToCart = function (product) {
     });
   }
 
+  const updatedPrice = this.cart.total + product.price;
   const updatedCart = {
     items: updatedCartItems,
+    total: updatedPrice,
   };
 
   this.cart = updatedCart;
@@ -60,11 +65,64 @@ userSchema.methods.addToCart = function (product) {
 };
 
 userSchema.methods.deleteItemFromCart = function (productId) {
+  const cartProductIndex = this.cart.items.findIndex((cp) => {
+    return cp.productId.toString() === productId.toString();
+  });
+
+  let updatedTotal = 0;
+  const qty = this.cart.items[cartProductIndex].quantity;
+
   const updatedCart = this.cart.items.filter((i) => {
     return i.productId.toString() !== productId.toString();
   });
   this.cart.items = updatedCart;
-  return this.save();
+
+  return Product.findOne({ _id: productId })
+    .then((product) => {
+      updatedTotal = this.cart.total - product.price * qty;
+      this.cart.total = updatedTotal;
+      return this.save();
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+userSchema.methods.decreaseItemQtyCart = function (productId) {
+  const cartProductIndex = this.cart.items.findIndex((cp) => {
+    return cp.productId.toString() === productId.toString();
+  });
+
+  if (this.cart.items[cartProductIndex].quantity > 1) {
+    this.cart.items[cartProductIndex].quantity -= 1;
+
+    return Product.findOne({ _id: productId })
+      .then((product) => {
+        this.cart.total -= product.price;
+        return this.save();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  } else {
+    let updatedTotal = 0;
+    const qty = this.cart.items[cartProductIndex].quantity;
+
+    const updatedCart = this.cart.items.filter((i) => {
+      return i.productId.toString() !== productId.toString();
+    });
+    this.cart.items = updatedCart;
+
+    return Product.findOne({ _id: productId })
+      .then((product) => {
+        updatedTotal = this.cart.total - product.price * qty;
+        this.cart.total = updatedTotal;
+        return this.save();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 };
 
 userSchema.methods.clearCart = function () {

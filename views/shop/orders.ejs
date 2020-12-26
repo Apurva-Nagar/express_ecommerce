@@ -13,17 +13,24 @@
             <% orders.forEach(order => { %>
                 <li>
                     <div class="detail-wrapper">
-                    <h5 class="detail-title">Order - #<%= order._id %></h5>
-                    <ul>
+                    <h5 class="detail-title">Order ID <br/> #<%= order._id %></h5>
+                    <ul class="order-list">
                         <% order.products.forEach(p => { %>
                             <div class="order-items">
-                            <li>
-                                Product: <%= p.product.title %> <br/> 
-                                Price: <%= p.product.price %> <br/> 
-                                Qty: <%= p.quantity %>
-                            </li>
-                        </div>
+                                <li>
+                                    Product: <%= p.product.title %> <br/> 
+                                    Price: &#8377; <%= p.product.price %> <br/> 
+                                    Qty: <%= p.quantity %>
+                                </li>
+                            </div>
                         <% }); %>
+                        <li>
+                            <% const date = new Date(order.date) %>
+                            <b>Order Date: <%= date.getDate() %>-<%= date.getMonth() %>-<%= date.getFullYear() %>  <%= date.getHours() %>:<%= date.getMinutes() %></b>
+                        </li>
+                        <li>
+                            <b>Order Total: &#8377; <%= order.total %></b>
+                        </li>
                     </ul>
                 </div>
                 </li>
