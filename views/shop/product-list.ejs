@@ -13,6 +13,11 @@
                     <img src="<%= product.image %>" class="card-img-top" alt="<%= product.title %>">
                     <div class="card-body">
                         <h5 class="card-title"><%= product.title %></h5>
+                        <% if (product.rating > 0) { %>
+                            <p><b>Rating: <%= product.rating %></b></p>
+                        <% } else { %>
+                            <p><b>Rating: No rating yet</b></p>
+                        <% } %>
                         <p class="card-text">
                             <% if (product.description.length > 250) { %>
                                 <%= product.description.substring(0, 150) %> ...

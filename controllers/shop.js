@@ -33,17 +33,51 @@ exports.getListProduct = (req, res, next) => {
 
 exports.getProduct = (req, res, next) => {
   const productId = req.params.productId;
-  Product.findById(productId)
-    .then((product) => {
-      res.render("shop/product-detail", {
-        product: product,
-        pageTitle: product.title,
-        path: "/products",
+  let bought = false;
+
+  if (req.user) {
+    Order.find({ "user.user_id": req.user._id })
+      .then((orders) => {
+        orders.forEach((order) => {
+          order.products.forEach((p) => {
+            if (productId.toString() === p.product._id.toString()) {
+              bought = true;
+            }
+          });
+        });
+      })
+      .then(() => {
+        Product.findById(productId)
+          .then((product) => {
+            res.render("shop/product-detail", {
+              product: product,
+              pageTitle: product.title,
+              path: "/products",
+              bought: bought,
+              userId: req.user._id,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  } else {
+    Product.findById(productId)
+      .then((product) => {
+        res.render("shop/product-detail", {
+          product: product,
+          pageTitle: product.title,
+          path: "/products",
+          bought: bought,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 };
 
 exports.getCart = (req, res, next) => {
@@ -135,6 +169,24 @@ exports.postOrder = (req, res, next) => {
       res.redirect("/orders");
     })
     .catch((err) => console.log(err));
+};
+
+exports.postAddReviewRating = (req, res, next) => {
+  const { productId, productReview, productRating } = req.body;
+  const { username, _id } = req.user;
+
+  const productRatingInt = Number(productRating.split("-")[0].trim());
+
+  Product.findOne({ _id: productId })
+    .then((product) => {
+      product.addReviewRating(_id, username, productReview, productRatingInt);
+    })
+    .then((result) => {
+      res.redirect("back");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 // exports.getCheckout = (req, res, next) => {

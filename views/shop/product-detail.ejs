@@ -11,6 +11,11 @@
         </div>
         <div class="detail-details">
             <h3 class="detail-title"><%=product.title %></h3>
+            <% if (product.rating > 0) { %>
+                <p><b>Rating: <%= product.rating %></b></p>
+            <% } else { %>
+                <p><b>Rating: No rating yet</b></p>
+            <% } %>
             <p class="detail-description"><%=product.description %></p>
             <p class="detail-price">&#8377; <%=product.price %></p>
             <% if (isAuthenticated) { %>
@@ -21,6 +26,60 @@
             </form>
             <% } %>
         </div>
+    </div>
+
+    <% let reviewed = false %>
+    <% product.reviews.items.forEach(review => { %>
+        <% if (review.userId.toString() === userId.toString()) { %>
+            <% reviewed = true  %>
+        <% } %>
+    <% }) %>
+    <% if (bought && !reviewed) { %> 
+        <div class="review-wrapper">
+            <div>
+                <h4>Give review as a buyer</h4>
+                <form action="/add-review" method="POST">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <input type="hidden" name="productId" value="<%= product._id %>">
+                    <div class="form-group mb-2">
+                        <select name="productRating" class="form-control" id="ratingSelect" required>
+                            <option>5 - Excelent</option>
+                            <option>4 - Good</option>
+                            <option>3 - Average</option>
+                            <option>2 - Bad</option>
+                            <option>1 - Very Bad</option>
+                        </select>
+                    </div>
+                    <div class="form-group mb-2">
+                        <textarea
+                        name="productReview"
+                        class="form-control"
+                        id="review"
+                        placeholder="Example - Great product. A must buy."
+                        rows="5"
+                        cols="80"
+                        required
+                        ></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Submit Review</button>
+                </form>
+            </div>
+        </div>
+    <% } %>
+    <div class="review-details-wrapper">
+        <h4>Customer Reviews:</h4>
+        <% if (product.reviews.items.length > 0) { %>
+            <% product.reviews.items.forEach(review => { %>
+                <div class="review-comment">
+                    <p>
+                        By - <%= review.username %><br>
+                        <%= review.comment %>
+                    </p>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>No reviews for this product yet.</p>
+        <% } %>
     </div>
 </section>
 
