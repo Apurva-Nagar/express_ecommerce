@@ -12,7 +12,7 @@
               <%= errorMessage %>
             </div>
             <% } %>
-          <form action="/signup" method="POST">
+          <form action="/signup" method="POST" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="<%= csrfToken %>">
             <div class="form-group mb-2">
               <label for="username">Name</label>
@@ -59,6 +59,16 @@
                   id="confirmPassword"
                   placeholder="Confirm Password"
                   value="<%= oldInput.confirmPassword%>"
+                  required
+                />
+              </div>
+              <div class="form-group mb-2">
+                <label for="profileImage">Profile Image</label>
+                <input
+                  type="file"
+                  name="profileImage"
+                  class="form-control"
+                  id="profileImage"
                   required
                 />
               </div>

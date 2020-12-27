@@ -23,6 +23,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  profileImage: { type: String },
   cart: {
     items: [
       {
@@ -35,6 +36,17 @@ const userSchema = new Schema({
       },
     ],
     total: { type: Number, default: 0.0 },
+  },
+  wishlist: {
+    items: [
+      {
+        productId: {
+          type: Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
+        },
+      },
+    ],
   },
 });
 
@@ -127,6 +139,28 @@ userSchema.methods.decreaseItemQtyCart = function (productId) {
 
 userSchema.methods.clearCart = function () {
   this.cart = { items: [] };
+  return this.save();
+};
+
+userSchema.methods.addToWishlist = function (productId) {
+  const updatedWishlistItems = [...this.wishlist.items];
+  updatedWishlistItems.push({
+    productId: productId,
+  });
+
+  const updatedWishlist = {
+    items: updatedWishlistItems,
+  };
+
+  this.wishlist = updatedWishlist;
+  return this.save();
+};
+
+userSchema.methods.deleteFromWishlist = function (productId) {
+  const updatedWishlist = this.wishlist.items.filter((i) => {
+    return i.productId.toString() !== productId.toString();
+  });
+  this.wishlist.items = updatedWishlist;
   return this.save();
 };
 

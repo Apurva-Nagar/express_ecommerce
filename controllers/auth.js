@@ -75,6 +75,22 @@ exports.getSignup = (req, res, next) => {
 
 exports.postSignup = (req, res, next) => {
   const { username, email, password, confirmPassword } = req.body;
+  const profileImage = req.file;
+
+  if (!profileImage) {
+    return res.status(422).render("auth/signup", {
+      pageTitle: "Signup",
+      path: "/signup",
+      errorMessage:
+        "Please add a valid image (Supported formats: .PNG, .JPG, .JPEG)",
+      oldInput: {
+        username: username,
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+      },
+    });
+  }
 
   const errors = validationResult(req);
   console.log(errors);
@@ -101,6 +117,7 @@ exports.postSignup = (req, res, next) => {
         password: hashedPassword,
         userType: "shopper",
         cart: { items: [] },
+        profileImage: profileImage.path,
       });
       return user.save();
     })

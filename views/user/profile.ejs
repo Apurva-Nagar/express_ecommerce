@@ -1,0 +1,19 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+<%- include('../includes/nav.ejs') %>
+
+<section>
+    <h1>Your Profile</h1>
+    <% if (errorMessage != '') { %>
+        <div class="alert alert-danger" role="alert">
+          <%= errorMessage %>
+        </div>
+    <% } %>
+    <div class="profile-details">
+        <img src="\<%= profileImage %>" alt="<%= name %>" class="profile-image">
+        <p>Name: <%= name %></p>
+        <p>Email: <%= email %></p>
+    </div>
+</section>
+<%- include('../includes/end.ejs') %>

@@ -12,9 +12,6 @@
       <li class="<%= path === '/cart' ? 'nav-item active' : 'nav-item' %>">
         <a class="nav-link" href="/cart">Cart</a>
       </li>
-      <li class="<%= path === '/orders' ? 'nav-item active' : 'nav-item' %>">
-        <a class="nav-link" href="/orders">Orders</a>
-      </li>
       <% } %> <% if (isAuthenticated && userType == 'admin') { %>
       <li
         class="<%= path === '/admin/add-product' ? 'nav-item active' : 'nav-item' %>"
@@ -34,11 +31,37 @@
         <a class="nav-link" href="/signup">Signup</a>
       </li>
       <% } else { %>
-      <li class="nav-item">
-        <form action="/logout" method="POST">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-          <button type="submit" class="logout-btn">Logout</button>
-        </form>
+      <li class="nav-item dropdown">
+        <a
+          class="nav-link dropdown-toggle"
+          href="#"
+          id="navbarDropdown"
+          role="button"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
+        >
+          <img
+            src="\<%= profileImage %>"
+            alt="profile-pic"
+            class="navbar-profile"
+          />
+        </a>
+        <div
+          class="dropdown-menu dropdown-menu-right"
+          aria-labelledby="navbarDropdown"
+        >
+          <a class="dropdown-item" href="/profile">Profile</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/wishlist">Wishlist</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/orders">Orders</a>
+          <div class="dropdown-divider"></div>
+          <form action="/logout" method="POST">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button type="submit" class="logout-btn">Logout</button>
+          </form>
+        </div>
       </li>
       <% } %>
     </ul>
