@@ -59,10 +59,29 @@
             <div class="cart-total-wrapper">
                 <div class="cart-total">
                     <h4>Cart Total</h4>
-                    <p>Total Price: <%= total %></p>
+                    <p class="cart-total-price">&#8377; <%= total %></p>
+                </div>
+                <div class="address-selector">
+                    <h5>Select Order Address</h5>
                     <form action="/create-order" method="POST">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                        <button class="btn btn-success" type="submit">Order Now</button>
+                        <div class="form-group">
+                            <select name="orderAddress" class="form-control" id="addressSelect" required>
+                                <% if (addresses.length > 0) { %>
+                                    <% addresses.forEach((address, i) => { %>
+                                        <option>
+                                            <%= address.block %>,
+                                            <%= address.street %>,
+                                            <%= address.city %>.
+                                            - <%= address.pincode %>
+                                        </option>
+                                    <% }) %>
+                                <% } else { %>
+                                    <option>Please add an address</option>
+                                <% } %>
+                            </select>
+                          </div>
+                          <button class="btn btn-success" type="submit">Order Now</button>
                     </form>
                 </div>
             </div>

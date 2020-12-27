@@ -20,4 +20,8 @@ router.post(
 
 router.post("/cart-wishlist", isAuth, userController.postWishlistToCart);
 
+router.post("/add-address", userController.postAddAddress);
+
+router.post("/delete-address", userController.postDeleteAddress);
+
 module.exports = router;

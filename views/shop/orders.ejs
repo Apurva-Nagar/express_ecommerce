@@ -29,6 +29,9 @@
                             <b>Order Date: <%= date.getDate() %>-<%= date.getMonth() %>-<%= date.getFullYear() %>  <%= date.getHours() %>:<%= date.getMinutes() %></b>
                         </li>
                         <li>
+                            <b>Delivered To: <br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%= order.address %></b>
+                        </li>
+                        <li>
                             <b>Order Total: &#8377; <%= order.total %></b>
                         </li>
                     </ul>

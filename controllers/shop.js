@@ -57,6 +57,7 @@ exports.getCart = (req, res, next) => {
         path: "/cart",
         products: products,
         total: user.cart.total,
+        addresses: req.user.addresses.items,
       });
     })
     .catch((err) => {
@@ -106,6 +107,7 @@ exports.getOrders = (req, res, next) => {
 };
 
 exports.postOrder = (req, res, next) => {
+  const { orderAddress } = req.body;
   req.user
     .populate("cart.items.productId")
     .execPopulate()
@@ -122,6 +124,7 @@ exports.postOrder = (req, res, next) => {
         products: products,
         total: user.cart.total,
         date: Date.now(),
+        address: orderAddress,
       });
       order.save();
     })

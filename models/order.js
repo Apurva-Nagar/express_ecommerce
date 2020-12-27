@@ -26,6 +26,7 @@ const orderSchema = new Schema({
   },
   total: { type: Number },
   date: { type: Date },
+  address: { type: String },
 });
 
 module.exports = mongoose.model("Order", orderSchema);

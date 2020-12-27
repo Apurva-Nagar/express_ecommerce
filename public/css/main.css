@@ -197,12 +197,18 @@ section {
 .cart-total {
   background-color: #ffffff;
   width: 25%;
-  margin-right: 120px;
+  margin-right: 30px;
   margin-top: 25px;
   padding: 15px 15px;
   box-shadow: 2px 2px 10px black;
   border: 1px solid #ffffff;
   border-radius: 4px;
+}
+
+.cart-total-price {
+  font-size: 50px;
+  padding-top: 10px;
+  color: #3cb371;
 }
 
 .cart-qty {
@@ -227,7 +233,51 @@ section {
   text-align: justify;
 }
 
+.profile-wrapper {
+  display: flex;
+  flex-wrap: no-wrap;
+  justify-content: space-evenly;
+}
+
 .profile-image {
   height: 165px;
   width: 165px;
+}
+
+.address-wrapper {
+  background-color: #ffffff;
+  width: 70%;
+  box-shadow: 2px 2px 10px black;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  padding: 15px 18px;
+}
+
+.address-detail-wrapper {
+  display: flex;
+  flex-wrap: no-wrap;
+  margin-top: 35px;
+  margin-bottom: 35px;
+}
+
+.address-details {
+  background-color: #ffffff;
+  width: 91%;
+  margin: auto;
+  box-shadow: 2px 2px 10px black;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  padding: 15px 18px;
+  text-align: justify;
+}
+
+.address-selector {
+  background-color: #ffffff;
+  width: 53%;
+  box-shadow: 2px 2px 10px black;
+  border: 1px solid #ffffff;
+  border-radius: 4px;
+  padding: 15px 18px;
+  margin-top: 25px;
+  margin-right: 120px;
 }

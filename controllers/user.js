@@ -8,6 +8,7 @@ exports.getProfile = (req, res, next) => {
     email: req.user.email,
     profileImage: req.user.profileImage,
     errorMessage: "",
+    addresses: req.user.addresses.items,
   });
 };
 
@@ -39,14 +40,26 @@ exports.postWishlistAddProduct = (req, res, next) => {
     }
   }
 
-  req.user.addToWishlist(productId);
-  return res.redirect("/wishlist");
+  req.user
+    .addToWishlist(productId)
+    .then((result) => {
+      return res.redirect("/wishlist");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.postWishlistDeleteProduct = (req, res, next) => {
   const { productId } = req.body;
-  req.user.deleteFromWishlist(productId);
-  return res.redirect("/wishlist");
+  req.user
+    .deleteFromWishlist(productId)
+    .then((result) => {
+      return res.redirect("/wishlist");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.postWishlistToCart = (req, res, next) => {
@@ -60,6 +73,30 @@ exports.postWishlistToCart = (req, res, next) => {
     })
     .then((result) => {
       res.redirect("/cart");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.postAddAddress = (req, res, next) => {
+  const { block, street, city, pin } = req.body;
+  req.user
+    .addAddress(block, street, city, pin)
+    .then((result) => {
+      res.redirect("/profile");
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.postDeleteAddress = (req, res, next) => {
+  const { addressId } = req.body;
+  req.user
+    .deleteAddress(addressId)
+    .then((result) => {
+      res.redirect("/profile");
     })
     .catch((err) => {
       console.log(err);

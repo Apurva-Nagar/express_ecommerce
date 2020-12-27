@@ -48,6 +48,28 @@ const userSchema = new Schema({
       },
     ],
   },
+  addresses: {
+    items: [
+      {
+        block: {
+          type: String,
+          required: true,
+        },
+        street: {
+          type: String,
+          required: true,
+        },
+        city: {
+          type: String,
+          required: true,
+        },
+        pincode: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+  },
 });
 
 userSchema.methods.addToCart = function (product) {
@@ -161,6 +183,31 @@ userSchema.methods.deleteFromWishlist = function (productId) {
     return i.productId.toString() !== productId.toString();
   });
   this.wishlist.items = updatedWishlist;
+  return this.save();
+};
+
+userSchema.methods.addAddress = function (block, street, city, pin) {
+  const updatedAddressItems = [...this.addresses.items];
+  updatedAddressItems.push({
+    block: block,
+    street: street,
+    city: city,
+    pincode: pin,
+  });
+
+  const updatedAddresses = {
+    items: updatedAddressItems,
+  };
+
+  this.addresses = updatedAddresses;
+  return this.save();
+};
+
+userSchema.methods.deleteAddress = function (addressId) {
+  const updatedAddresses = this.addresses.items.filter((i) => {
+    return i._id.toString() !== addressId.toString();
+  });
+  this.addresses.items = updatedAddresses;
   return this.save();
 };
 
