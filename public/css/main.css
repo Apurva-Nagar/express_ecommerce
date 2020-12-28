@@ -316,3 +316,9 @@ section {
   border-bottom: 1px solid #dcdcdc;
   padding-top: 20px;
 }
+
+.pagination-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
