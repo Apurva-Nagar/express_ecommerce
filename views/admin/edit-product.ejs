@@ -31,6 +31,20 @@
             required
           />
         </div>
+
+        <div class="form-group mb-2">
+          <label for="categorySelect">Product Category</label>
+          <select name="productCategory" class="form-control" id="categorySelect" required>
+              <% if (categories.length > 0) { %>
+                  <% categories.forEach((category) => { %>
+                      <option value="<%= category._id %>"><%= category.name %></option>
+                  <% }) %>
+              <% } else { %>
+                  <option value="NULL">Please add a category</option>
+              <% } %>
+          </select>
+        </div>
+
         <div class="form-group mb-2">
           <label for="productImg">Image URL</label>
           <input

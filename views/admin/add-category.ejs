@@ -1,0 +1,25 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+<%- include('../includes/nav.ejs') %>
+
+<section>
+    <h1>Add Categories</h1>
+    <form action="/admin/add-category" method="POST">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <div class="form-group mb-2">
+            <label for="category">Category</label>
+            <input
+              type="text"
+              name="category"
+              class="form-control"
+              id="category"
+              placeholder="E.g. Electronics"
+              required
+            />
+        </div>
+        <button class="btn btn-success" type="submit">Add Category</button>
+    </form>
+</section>
+
+<%- include('../includes/end.ejs') %>

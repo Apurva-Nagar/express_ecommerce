@@ -19,9 +19,19 @@
         <a class="nav-link" href="/admin/add-product">Add Product</a>
       </li>
       <li
+        class="<%= path === '/admin/add-category' ? 'nav-item active' : 'nav-item' %>"
+      >
+        <a class="nav-link" href="/admin/add-category">Add Category</a>
+      </li>
+      <li
         class="<%= path === '/admin/product-list/' ? 'nav-item active' : 'nav-item' %>"
       >
         <a class="nav-link" href="/admin/product-list/">Admin Products</a>
+      </li>
+      <li
+        class="<%= path === '/admin/categories' ? 'nav-item active' : 'nav-item' %>"
+      >
+        <a class="nav-link" href="/admin/categories">Categories</a>
       </li>
       <% } %> <% if (!isAuthenticated) { %>
       <li class="<%= path === '/login' ? 'nav-item active' : 'nav-item' %>">

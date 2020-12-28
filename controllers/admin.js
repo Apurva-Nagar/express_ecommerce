@@ -1,18 +1,27 @@
 const Product = require("../models/product");
+const Category = require("../models/category");
 const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 exports.getAddProduct = (req, res, next) => {
-  res.render("admin/edit-product", {
-    pageTitle: "Add Product",
-    path: "/admin/add-product",
-    editing: false,
-    hasError: false,
-    errorMessage: "",
-  });
+  Category.find()
+    .then((categories) => {
+      res.render("admin/edit-product", {
+        pageTitle: "Add Product",
+        path: "/admin/add-product",
+        editing: false,
+        hasError: false,
+        errorMessage: "",
+        categories: categories,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 exports.postAddProduct = (req, res, next) => {
-  const { title, img_url, description, price } = req.body;
+  const { title, img_url, description, price, productCategory } = req.body;
 
   const errors = validationResult(req);
 
@@ -43,6 +52,33 @@ exports.postAddProduct = (req, res, next) => {
   product
     .save()
     .then((result) => {
+      if (productCategory != "NULL") {
+        const id = mongoose.Types.ObjectId(productCategory);
+        Category.findOne({ _id: id })
+          .then((category) => {
+            category.products.items.push({
+              productId: product._id,
+            });
+            category.save();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        const id = mongoose.Types.ObjectId("5fe9afbcee0f47324c1b371f");
+        Category.findOne({ _id: id })
+          .then((category) => {
+            category.products.items.push({
+              productId: product._id,
+            });
+            category.save();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    })
+    .then(() => {
       res.redirect("/admin/product-list");
     })
     .catch((err) => {
@@ -71,19 +107,27 @@ exports.getEditProduct = (req, res, next) => {
     return res.redirect("/");
   }
   const productId = req.params.productId;
+
   Product.findById(productId)
     .then((product) => {
       if (!product) {
         return res.redirect("/");
       }
-      res.render("admin/edit-product", {
-        pageTitle: "Edit Product",
-        path: "/admin/edit-product",
-        editing: editMode,
-        product: product,
-        hasError: false,
-        errorMessage: "",
-      });
+      Category.find()
+        .then((categories) => {
+          res.render("admin/edit-product", {
+            pageTitle: "Edit Product",
+            path: "/admin/edit-product",
+            editing: editMode,
+            product: product,
+            hasError: false,
+            errorMessage: "",
+            categories: categories,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })
     .catch((err) => console.log(err));
 };
@@ -135,4 +179,35 @@ exports.postDeleteProduct = (req, res, next) => {
     .catch((err) => {
       console.log(err);
     });
+};
+
+exports.getCategories = (req, res, next) => {
+  Category.find()
+    .then((categories) => {
+      res.render("admin/categories", {
+        pageTitle: "Categories",
+        path: "/categories",
+        categories: categories,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+exports.getAddCategory = (req, res, next) => {
+  res.render("admin/add-category", {
+    pageTitle: "Categories",
+    path: "/admin/add-category",
+  });
+};
+
+exports.postAddCategory = (req, res, next) => {
+  const { category } = req.body;
+
+  const productCategory = new Category({
+    name: category,
+  });
+  productCategory.save();
+  res.redirect("/admin/categories");
 };

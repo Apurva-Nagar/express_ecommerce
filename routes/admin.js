@@ -74,4 +74,10 @@ router.post(
   adminController.postDeleteProduct
 );
 
+router.get("/categories", isAuth, isAdmin, adminController.getCategories);
+
+router.get("/add-category", isAuth, isAdmin, adminController.getAddCategory);
+
+router.post("/add-category", isAuth, isAdmin, adminController.postAddCategory);
+
 module.exports = router;

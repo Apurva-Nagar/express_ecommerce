@@ -1,0 +1,13 @@
+<%- include('../includes/head.ejs') %>
+</head>
+<body>
+<%- include('../includes/nav.ejs') %>
+
+<section>
+    <h1>Available Categories</h1>
+    <% categories.forEach(category => { %>
+        <p><%= category.name %></p>
+    <% }) %>
+</section>
+
+<%- include('../includes/end.ejs') %>
